@@ -98,7 +98,7 @@ local bind = lib.addKeybind({
         if not price then return end
 
         local confirmed = lib.alertDialog({
-            header = locale('return_boat'),
+            header = locale('return_boat2'),
             content = locale('return_content', math.floor(price / Config.renting.returnDivider)),
             cancel = true,
             centered = true
