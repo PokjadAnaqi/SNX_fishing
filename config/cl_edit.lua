@@ -236,3 +236,10 @@ function GetInventoryIcon(itemName)
 
     return path:format(itemName) .. '?height=128'
 end
+
+function GetItemCount(item)
+    if GetResourceState('ox_inventory') == 'started' and exports.ox_inventory then
+        return exports.ox_inventory:Search('count', item) or 0
+    end
+    return 0
+end
