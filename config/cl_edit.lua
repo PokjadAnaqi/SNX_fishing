@@ -1,50 +1,150 @@
-function ShowNotification(message, notifyType)
-    lib.notify({
-        description = message,
-        type = notifyType,
-        position = 'top-right'
-    })
+function ShowNotification(message, notifyType, title, duration)
+    notifyType = notifyType or 'inform'
+    title = title or 'Notification'
+    duration = duration or Config.NotificationDuration
+
+    if Config.NotificationSystem == "ox" and lib and lib.notify then
+        lib.notify({
+            description = message,
+            type = notifyType, -- 'inform', 'success', 'error', 'warning'
+            position = Config.NotificationPosition
+        })
+
+    elseif Config.NotificationSystem == "okok" and exports['okokNotify'] then
+        local typeMap = {
+            inform = 'info',
+            info = 'info',
+            success = 'success',
+            error = 'error',
+            warning = 'warning'
+        }
+        local okokType = typeMap[notifyType] or 'info'
+
+        exports['okokNotify']:Alert(title, message, duration, okokType)
+
+    else
+        BeginTextCommandThefeedPost("STRING")
+        AddTextComponentSubstringPlayerName(message)
+        EndTextCommandThefeedPostMessagetext("CHAR_DEFAULT", "CHAR_DEFAULT", false, 1, title, "")
+        EndTextCommandThefeedPostTicker(false, false)
+    end
 end
 
-RegisterNetEvent('lunar_fishing:showNotification')
-AddEventHandler('lunar_fishing:showNotification', ShowNotification)
+RegisterNetEvent('SNX_fishing:showNotification')
+AddEventHandler('SNX_fishing:showNotification', ShowNotification)
 
 function ShowUI(text, icon)
-    if icon == 0 then
-        lib.showTextUI(text)
+    if Config.UISystem == "ox" and lib and lib.showTextUI then
+        -- ox_lib version
+        if not icon or icon == 0 then
+            lib.showTextUI(text)
+        else
+            lib.showTextUI(text, { icon = icon })
+        end
+
+    elseif Config.UISystem == "okok" and exports['okokTextUI'] then
+        -- okokTextUI version
+        exports['okokTextUI']:Open(text, Config.DefaultUIColor, "right") 
+        -- Possible colors: 'lightblue', 'lightgreen', 'darkgreen', 'red', etc.
+
     else
-        lib.showTextUI(text, {
-            icon = icon
-        })
+        print("^3[UI] ^7" .. text)
     end
 end
 
 function HideUI()
-    lib.hideTextUI()
+    if Config.UISystem == "ox" and lib and lib.hideTextUI then
+        lib.hideTextUI()
+    elseif Config.UISystem == "okok" and exports['okokTextUI'] then
+        exports['okokTextUI']:Close()
+    end
 end
 
 function ShowProgressBar(text, duration, canCancel, anim, prop)
-    return lib.progressBar({
-        duration = duration,
-        label = text,
-        useWhileDead = false,
-        canCancel = canCancel,
-        disable = {
-            car = true,
-            move = true,
-            combat = true
-        },
-        anim = anim,
-        prop = prop
-    })
+    duration = duration or 5000
+    canCancel = canCancel ~= false -- default true
+
+    if Config.ProgressBarSystem == "ox" and lib and lib.progressBar then
+        -- ox_lib version
+        return lib.progressBar({
+            duration = duration,
+            label = text,
+            useWhileDead = false,
+            canCancel = canCancel,
+            disable = {
+                car = true,
+                move = true,
+                combat = true
+            },
+            anim = anim,
+            prop = prop
+        })
+
+    elseif Config.ProgressBarSystem == "qb" and exports['progressbar'] then
+        local animDict, animName = nil, nil
+        if anim and anim.dict and anim.clip then
+            animDict = anim.dict
+            animName = anim.clip
+        end
+
+        exports['progressbar']:Progress({
+            name = 'custom_progress',
+            duration = duration,
+            label = text,
+            useWhileDead = false,
+            canCancel = canCancel,
+            controlDisables = {
+                disableMovement = true,
+                disableCarMovement = true,
+                disableCombat = true,
+            },
+            animation = {
+                animDict = animDict,
+                anim = animName
+            },
+            prop = prop
+        }, function(cancelled)
+            if cancelled then
+                TriggerEvent('progressbar:cancelled')
+            else
+                TriggerEvent('progressbar:finished')
+            end
+        end)
+        return not cancelled
+
+    else
+        print("^3[ProgressBar] ^7Fallback — " .. text .. " (" .. duration .. "ms)")
+        Wait(duration)
+        return true
+    end
 end
 
 function SetVehicleFuel(vehicle, fuelLevel)
-    if GetResourceState('LegacyFuel') == 'started' then
+    -- sanitize
+    fuelLevel = tonumber(fuelLevel) or 0
+    if fuelLevel < 0 then fuelLevel = 0 end
+    if fuelLevel > 100 then fuelLevel = 100 end
+
+    -- LegacyFuel
+    if GetResourceState('LegacyFuel') == 'started' and exports['LegacyFuel'] then
         exports['LegacyFuel']:SetFuel(vehicle, fuelLevel)
-    elseif GetResourceState('ox_fuel') then
-        Entity(vehicle).state.fuel = fuelLevel
+        return
     end
+
+    -- cdn-fuel
+    if GetResourceState('cdn-fuel') == 'started' and exports['cdn-fuel'] then
+        exports['cdn-fuel']:SetFuel(vehicle, fuelLevel)
+        return
+    end
+
+    -- ox_fuel (statebag)
+    if GetResourceState('ox_fuel') == 'started' then
+        Entity(vehicle).state.fuel = fuelLevel
+        return
+    end
+
+    -- fallback native (works if you’re using GTA’s internal fuel level)
+    SetVehicleFuelLevel(vehicle, fuelLevel + 0.0)
 end
 
 function SetVehicleOwner(plate)
