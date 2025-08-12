@@ -1,7 +1,7 @@
 Config = {}
 
 -- Choose your notification system: "ox" or "okok"
-Config.NotificationSystem = "ox" -- or "okokNotify"
+Config.NotificationSystem = "ox" -- or "okok"
 Config.NotificationPosition = "top-right" --- Default notification position (only used by ox_lib)
 Config.NotificationDuration = 5000 -- Default notification duration (milliseconds, used by okokNotify)
 
