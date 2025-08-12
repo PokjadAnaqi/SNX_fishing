@@ -119,6 +119,48 @@ function ShowProgressBar(text, duration, canCancel, anim, prop)
     end
 end
 
+local function _getOxDifficultiesByChance(chance)
+    for _, rule in ipairs(Config.FishingSkillRules.ox) do
+        if chance >= rule.minChance then
+            return rule.difficulties
+        end
+    end
+    return { 'medium', 'hard' } -- fallback
+end
+
+local function _getPsParamsByChance(chance)
+    for _, rule in ipairs(Config.FishingSkillRules.ps) do
+        if chance >= rule.minChance then
+            return rule.circles, rule.ms
+        end
+    end
+    return 3, 18 -- fallback
+end
+
+-- One API to run a skill check; returns boolean
+local function DoFishingSkillCheck(fishId)
+    local f = Config.fish[fishId]
+    if not f then return false end
+
+    local chance = tonumber(f.chance) or 15
+
+    if Config.SkillSystem == 'ox' and lib and lib.skillCheck then
+        local diffs = _getOxDifficultiesByChance(chance)
+        return lib.skillCheck(diffs, { 'e' }) == true
+
+    elseif Config.SkillSystem == 'ps' and exports['ps-ui'] then
+        local circles, ms = _getPsParamsByChance(chance)
+        local p = promise.new()
+        exports['ps-ui']:Circle(function(success)
+            p:resolve(success and true or false)
+        end, circles, ms)
+        return Citizen.Await(p) == true
+    end
+
+    -- If neither is available, succeed to avoid soft-locks (or change to false if you prefer)
+    return true
+end
+
 function SetVehicleFuel(vehicle, fuelLevel)
     -- sanitize
     fuelLevel = tonumber(fuelLevel) or 0
