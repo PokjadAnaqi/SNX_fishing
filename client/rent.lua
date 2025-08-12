@@ -28,7 +28,7 @@ local function spawnBoat(boat)
             SetVehicleOwner(GetVehicleNumberPlateText(vehicle))
             TaskWarpPedIntoVehicle(cache.ped, vehicle, -1)
             SetVehicleFuel(vehicle, 100.0)
-            TriggerServerEvent('lunar_fishing:registerBoat', NetworkGetNetworkIdFromEntity(vehicle))
+            TriggerServerEvent('SNX_fishing:registerBoat', NetworkGetNetworkIdFromEntity(vehicle))
         end)
     end
 end
@@ -44,7 +44,7 @@ local function rentVehicle(index)
 
     if not confirmed then return end
 
-    local success = lib.callback.await('lunar_fishing:rentVehicle', false, index)
+    local success = lib.callback.await('SNX_fishing:rentVehicle', false, index)
 
     if success then
         spawnBoat(boat)
@@ -107,7 +107,7 @@ local bind = lib.addKeybind({
         if not confirmed then return end
 
         local netId = NetworkGetNetworkIdFromEntity(cache.vehicle)
-        local success = lib.callback.await('lunar_fishing:returnVehicle', false, netId)
+        local success = lib.callback.await('SNX_fishing:returnVehicle', false, netId)
 
         if success then
             TaskLeaveAnyVehicle(cache.ped)
