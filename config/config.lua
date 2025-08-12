@@ -1,5 +1,17 @@
 Config = {}
 
+-- Choose your notification system: "ox_lib" or "okokNotify"
+Config.NotificationSystem = "ox" -- or "okokNotify"
+Config.NotificationPosition = "top-right" --- Default notification position (only used by ox_lib)
+Config.NotificationDuration = 5000 -- Default notification duration (milliseconds, used by okokNotify)
+
+-- UI System: "ox" or "okok"
+Config.UISystem = "ox" -- or "okok"
+Config.DefaultUIIcon = "fa-solid fa-circle-info" -- -- Default UI icon (only used by ox_lib)
+Config.DefaultUIColor = "darkgreen" -- okokTextUI default style
+
+Config.ProgressBarSystem = "ox" -- or "qb"
+
 Config.progressPerCatch = 0.05 -- The progress per one fish caught
 
 ---@class Fish
