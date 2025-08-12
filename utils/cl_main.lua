@@ -192,7 +192,7 @@ end
 
 local labels = {}
 
-lib.callback('lunar_fishing:getItemLabels', false, function(data)
+lib.callback('SNX_fishing:getItemLabels', false, function(data)
     labels = data
 end)
 
