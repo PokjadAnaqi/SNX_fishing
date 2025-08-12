@@ -5,6 +5,7 @@ An advanced fishing script that enchances the roleplay on your server!
 * okokNotify
 * okokTextUI
 * PS-UI skillcheck (Circle) support
+* Other feature SOON
 
 # Features
 * Supports ESX/QBCore
@@ -24,3 +25,8 @@ An advanced fishing script that enchances the roleplay on your server!
 * ps-ui/ps_lib
 
 ### Preview: https://youtu.be/XUfPRGEm9_I
+### OWNER Discord: https://discord.gg/zDK4CHQ56N
+### MY Discord: https://discord.gg/gCBrnn9bxN
+
+MODIFIED BY POKJADANAQI 
+SCRIPT FORK FROM LUNAR_FISHING - LUNAR-SCRIPTS
