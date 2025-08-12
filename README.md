@@ -1,5 +1,10 @@
-# lunar_fishing
+# SNX_fishing
 An advanced fishing script that enchances the roleplay on your server!
+
+# Add Rich Config Features
+* okokNotify
+* okokTextUI
+* PS-UI skillcheck (Circle) support
 
 # Features
 * Supports ESX/QBCore
@@ -16,7 +21,6 @@ An advanced fishing script that enchances the roleplay on your server!
 * es_extended/qb-core
 * ox_lib
 * ox_target/qtarget/qb-target
+* ps-ui/ps_lib
 
 ### Preview: https://youtu.be/XUfPRGEm9_I
-
-### Discord: https://discord.gg/zDK4CHQ56N
