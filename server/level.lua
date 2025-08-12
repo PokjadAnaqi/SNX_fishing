@@ -2,7 +2,7 @@
 local levels = {}
 
 MySQL.ready(function()
-    local data = MySQL.query.await('SELECT * FROM lunar_fishing')
+    local data = MySQL.query.await('SELECT * FROM SNX_fishing')
 
     for _, entry in ipairs(data) do
         levels[entry.user_identifier] = entry.xp
@@ -10,7 +10,7 @@ MySQL.ready(function()
 end)
 
 local function save()
-    local query = 'UPDATE lunar_fishing SET xp = ? WHERE user_identifier = ?'
+    local query = 'UPDATE SNX_fishing SET xp = ? WHERE user_identifier = ?'
     local parameters = {}
     local size = 0
 
@@ -46,10 +46,10 @@ end)
 
 local function createPlayer(identifier)
     levels[identifier] = 1.0
-    MySQL.insert.await('INSERT INTO lunar_fishing (user_identifier, xp) VALUES(?, ?)', { identifier, levels[identifier] })
+    MySQL.insert.await('INSERT INTO SNX_fishing (user_identifier, xp) VALUES(?, ?)', { identifier, levels[identifier] })
 end
 
-lib.callback.register('lunar_fishing:getLevel', function(source)
+lib.callback.register('SNX_fishing:getLevel', function(source)
     local player = Framework.getPlayerFromId(source)
 
     if not player then return end
@@ -72,10 +72,10 @@ function AddPlayerLevel(player, amount)
     levels[identifier] += amount
 
     if math.floor(levels[identifier]) - level > 0 then
-        TriggerClientEvent('lunar_fishing:showNotification', player.source, locale('unlocked_level'), 'success')
+        TriggerClientEvent('SNX_fishing:showNotification', player.source, locale('unlocked_level'), 'success')
     end
 
-    TriggerClientEvent('lunar_fishing:updateLevel', player.source, levels[identifier])
+    TriggerClientEvent('SNX_fishing:updateLevel', player.source, levels[identifier])
 end
 
 ---@param player Player
