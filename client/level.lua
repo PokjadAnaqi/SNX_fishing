@@ -8,17 +8,17 @@ local function updated(l)
     Update(level)
 end
 
-lib.callback('lunar_fishing:getLevel', false, updated)
+lib.callback('SNX_fishing:getLevel', false, updated)
 
 RegisterNetEvent('esx:playerLoaded', function()
-    lib.callback('lunar_fishing:getLevel', 100, updated)
+    lib.callback('SNX_fishing:getLevel', 100, updated)
 end)
 
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
-    lib.callback('lunar_fishing:getLevel', 100, updated)
+    lib.callback('SNX_fishing:getLevel', 100, updated)
 end)
 
-RegisterNetEvent('lunar_fishing:updateLevel', updated)
+RegisterNetEvent('SNX_fishing:updateLevel', updated)
 
 function GetCurrentLevel()
     return math.floor(level)
