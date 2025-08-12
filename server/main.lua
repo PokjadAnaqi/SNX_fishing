@@ -65,7 +65,7 @@ for _, rod in ipairs(Config.fishingRods) do
         busy[source] = true
 
         ---@type boolean, { index: integer, locationIndex: integer }?
-        local hasWater, currentZone = lib.callback.await('lunar_fishing:getCurrentZone', source)
+        local hasWater, currentZone = lib.callback.await('SNX_fishing:getCurrentZone', source)
 
         if not hasWater then
             busy[source] = nil
@@ -87,7 +87,7 @@ for _, rod in ipairs(Config.fishingRods) do
         local bait = getBestBait(player)
 
         if not bait then
-            TriggerClientEvent('lunar_fishing:showNotification', source, locale('no_bait'), 'error')
+            TriggerClientEvent('SNX_fishing:showNotification', source, locale('no_bait'), 'error')
             busy[source] = nil
             return
         end
@@ -100,7 +100,7 @@ for _, rod in ipairs(Config.fishingRods) do
         end
             
         player:removeItem(bait.name, 1)
-        local success = lib.callback.await('lunar_fishing:itemUsed', source, bait, Config.fish[fishName])
+        local success = lib.callback.await('SNX_fishing:itemUsed', source, bait, Config.fish[fishName])
 
         if success then
             player:addItem(fishName, 1)
@@ -108,7 +108,7 @@ for _, rod in ipairs(Config.fishingRods) do
             Utils.logToDiscord(source, player, ('Caught a %s.'):format(Utils.getItemLabel(fishName)))
         elseif math.random(100) <= rod.breakChance then
             player:removeItem(rod.name, 1)
-            TriggerClientEvent('lunar_fishing:showNotification', source, locale('rod_broke'), 'error')
+            TriggerClientEvent('SNX_fishing:showNotification', source, locale('rod_broke'), 'error')
         end
 
         busy[source] = nil
