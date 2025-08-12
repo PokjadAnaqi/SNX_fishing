@@ -14,23 +14,45 @@ Config.ProgressBarSystem = "ox" -- or "qb"
 
 Config.progressPerCatch = 0.05 -- The progress per one fish caught
 
+-- Skill system for fishing: "ox" (ox_lib skillCheck) or "ps" (ps-ui Circle)
+Config.SkillSystem = "ox"  -- or "ps"
+
+-- Difficulty mapping rules (based on fish.chance) so we don't store skillcheck in Config.fish
+-- Tweak these if you want different difficulty curves.
+---@field skillcheck SkillCheckDifficulity }
+Config.FishingSkillRules = {
+    -- For ox_lib (returns a list like {'easy','medium'}):
+    ox = {
+        { minChance = 30, difficulties = { 'easy', 'medium' } },
+        { minChance = 15, difficulties = { 'medium', 'medium' } },
+        { minChance = 5,  difficulties = { 'medium', 'hard' } },
+        { minChance = 0,  difficulties = { 'hard', 'hard' } },
+    },
+    -- For ps-ui (returns {circles, ms}):
+    ps = {
+        { minChance = 30, circles = 2, ms = 20 },
+        { minChance = 15, circles = 3, ms = 18 },
+        { minChance = 5,  circles = 4, ms = 16 },
+        { minChance = 0,  circles = 5, ms = 14 },
+    }
+}
+
 ---@class Fish
 ---@field price integer | { min: integer, max: integer }
 ---@field chance integer Percentage chance
----@field skillcheck SkillCheckDifficulity }
 
 ---@type table<string, Fish>
 Config.fish = {
-    ['anchovy'] = { price = { min = 25, max = 50 }, chance = 35, skillcheck = { 'easy', 'medium' } },
-    ['trout'] = { price = { min = 50, max = 100 }, chance = 35, skillcheck = { 'easy', 'medium' } },
-    ['haddock'] = { price = { min = 150, max = 200 }, chance = 20, skillcheck = { 'easy', 'medium' } },
-    ['salmon'] = { price = { min = 200, max = 250 }, chance = 10, skillcheck = { 'easy', 'medium', 'medium' } },
-    ['grouper'] = { price = { min = 300, max = 350 }, chance = 25, skillcheck = { 'easy', 'medium', 'medium', 'medium' } },
-    ['piranha'] = { price = { min = 350, max = 450 }, chance = 25, skillcheck = { 'easy', 'medium', 'hard' } },
-    ['red_snapper'] = { price = { min = 400, max = 450 }, chance = 20, skillcheck = { 'easy', 'medium', 'medium', 'medium' } },
-    ['mahi_mahi'] = { price = { min = 450, max = 500 }, chance = 20, skillcheck = { 'easy', 'medium', 'medium', 'medium' } },
-    ['tuna'] = { price = { min = 1250, max = 1500 }, chance = 5, skillcheck = { 'easy', 'medium', 'hard' } },
-    ['shark'] = { price = { min = 2250, max = 2750 }, chance = 1, skillcheck = { 'easy', 'medium', 'hard' } },
+    ['anchovy']    = { price = { min = 25,   max = 50   }, chance = 35 },
+    ['trout']      = { price = { min = 50,   max = 100  }, chance = 35 },
+    ['haddock']    = { price = { min = 150,  max = 200  }, chance = 20 },
+    ['salmon']     = { price = { min = 200,  max = 250  }, chance = 10 },
+    ['grouper']    = { price = { min = 300,  max = 350  }, chance = 25 },
+    ['piranha']    = { price = { min = 350,  max = 450  }, chance = 25 },
+    ['red_snapper']= { price = { min = 400,  max = 450  }, chance = 20 },
+    ['mahi_mahi']  = { price = { min = 450,  max = 500  }, chance = 20 },
+    ['tuna']       = { price = { min = 1250, max = 1500 }, chance = 5  },
+    ['shark']      = { price = { min = 2250, max = 2750 }, chance = 1  },
 }
 
 ---@class FishingRod
