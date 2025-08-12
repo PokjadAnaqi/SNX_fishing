@@ -116,7 +116,7 @@ local function hasWaterInFront()
     return hasWater
 end
 
-lib.callback.register('lunar_fishing:getCurrentZone', function()
+lib.callback.register('SNX_fishing:getCurrentZone', function()
     return hasWaterInFront(), currentZone
 end)
 
@@ -128,10 +128,10 @@ end
 
 ---@param bait FishingBait
 ---@param fish Fish
-lib.callback.register('lunar_fishing:itemUsed', function(bait, fish)
+lib.callback.register('SNX_fishing:itemUsed', function(bait, fishId)
     local zone = Config.fishingZones[currentZone] or Config.outside
-
     local object = createRodObject()
+
     lib.requestAnimDict('mini@tennis')
     lib.requestAnimDict('amb@world_human_stand_fishing@idle_a')
     setCanRagdoll(false)
@@ -146,34 +146,28 @@ lib.callback.register('lunar_fishing:itemUsed', function(bait, fish)
             HideUI()
             p:resolve(false)
         end
-    end, 100) --[[@as number?]]
+    end, 100)
 
-    local function wait(milliseconds)
-        Wait(milliseconds)
-
+    local function wait(ms)
+        Wait(ms)
         return p.state == 0
     end
 
     CreateThread(function()
         TaskPlayAnim(cache.ped, 'mini@tennis', 'forehand_ts_md_far', 3.0, 3.0, 1.0, 16, 0, false, false, false)
-
         if not wait(1500) then return end
 
         TaskPlayAnim(cache.ped, 'amb@world_human_stand_fishing@idle_a', 'idle_c', 3.0, 3.0, -1, 11, 0, false, false, false)
-
-        if not wait(math.random(zone.waitTime.min, zone.waitTime.max) / bait.waitDivisor * 1000) then return end
+        if not wait(math.random(zone.waitTime.min, zone.waitTime.max) / (bait.waitDivisor or 1.0) * 1000) then return end
 
         ShowNotification(locale('felt_bite'), 'warn')
         HideUI()
 
-        if interval then
-            ClearInterval(interval)
-            interval = nil
-        end
-
+        if interval then ClearInterval(interval) interval = nil end
         if not wait(math.random(2000, 4000)) then return end
 
-        local success = lib.skillCheck(fish.skillcheck, { 'e' })
+        -- >>> Skill check (OX or PS) decided by config, difficulty derived from fish chance
+        local success = DoFishingSkillCheck(fishId)
 
         if not success then
             ShowNotification(locale('catch_failed'), 'error')
@@ -184,10 +178,7 @@ lib.callback.register('lunar_fishing:itemUsed', function(bait, fish)
 
     local success = Citizen.Await(p)
 
-    if interval then
-        ClearInterval(interval)
-        interval = nil
-    end
+    if interval then ClearInterval(interval) interval = nil end
 
     DeleteEntity(object)
     ClearPedTasks(cache.ped)
