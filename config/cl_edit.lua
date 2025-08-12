@@ -119,7 +119,7 @@ function ShowProgressBar(text, duration, canCancel, anim, prop)
     end
 end
 
-local function _getOxDifficultiesByChance(chance)
+function _getOxDifficultiesByChance(chance)
     for _, rule in ipairs(Config.FishingSkillRules.ox) do
         if chance >= rule.minChance then
             return rule.difficulties
@@ -128,7 +128,7 @@ local function _getOxDifficultiesByChance(chance)
     return { 'medium', 'hard' } -- fallback
 end
 
-local function _getPsParamsByChance(chance)
+function _getPsParamsByChance(chance)
     for _, rule in ipairs(Config.FishingSkillRules.ps) do
         if chance >= rule.minChance then
             return rule.circles, rule.ms
@@ -138,7 +138,7 @@ local function _getPsParamsByChance(chance)
 end
 
 -- One API to run a skill check; returns boolean
-local function DoFishingSkillCheck(fishId)
+function DoFishingSkillCheck(fishId)
     local f = Config.fish[fishId]
     if not f then return false end
 
