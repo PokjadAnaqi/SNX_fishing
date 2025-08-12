@@ -1,23 +1,33 @@
 local function sell(fishName)
     local fish = Config.fish[fishName]
-    local heading = type(fish.price) == 'number' 
-                    and locale('sell_fish_heading', Utils.getItemLabel(fishName), fish.price)
-                    or locale('sell_fish_heading2', Utils.getItemLabel(fishName), fish.price.min, fish.price.max)
-    local amount = lib.inputDialog(heading, {
+    if not fish then return end
+
+    local maxAmount = GetItemCount(fishName)
+    local heading = type(fish.price) == 'number'
+        and locale('sell_fish_heading', Utils.getItemLabel(fishName), fish.price)
+        or locale('sell_fish_heading2', Utils.getItemLabel(fishName), fish.price.min, fish.price.max)
+
+    local res = lib.inputDialog(heading, {
         {
             type = 'number',
-            label = locale('amount'),
+            label = locale('amount') .. ' (max ' .. maxAmount .. ')',
             min = 1,
+            max = maxAmount,
             required = true
         }
-    })?[1] --[[@as number?]]
+    })
+    local amount = res and res[1]
 
     if not amount then
         lib.showContext('sell_fish')
         return
     end
+    if amount > maxAmount then
+        ShowNotification(locale('not_enough_fish'), 'error')
+        return
+    end
 
-    local success = lib.callback.await('lunar_fishing:sellFish', false, fishName, amount)
+    local success = lib.callback.await('SNX_fishing:sellFish', false, fishName, amount)
 
     if success then
         ShowProgressBar(locale('selling'), 3000, false, {
@@ -87,7 +97,7 @@ local function buy(data)
         return
     end
 
-    local success = lib.callback.await('lunar_fishing:buy', false, data, amount)
+    local success = lib.callback.await('SNX_fishing:buy', false, data, amount)
 
     if success then
         ShowProgressBar(locale('buying'), 3000, false, {
