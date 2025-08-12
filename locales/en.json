@@ -1,6 +1,6 @@
 {
     "no_water": "There needs to be water in front of you.",
-    "cancel": "[E] - Cancel",
+    "cancel": "Press [X] To Cancel",
     "felt_bite": "A fish has bitten the bait, prepare to catch it!",
     "catch_failed": "You didn't have enough strength to catch the fish.",
     "sell_fish_heading": "1x %s = %s$",
