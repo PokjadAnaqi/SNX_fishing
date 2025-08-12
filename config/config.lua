@@ -19,7 +19,7 @@ Config.SkillSystem = "ox"  -- or "ps"
 
 -- Difficulty mapping rules (based on fish.chance) so we don't store skillcheck in Config.fish
 -- Tweak these if you want different difficulty curves.
----@field skillcheck SkillCheckDifficulity }
+
 Config.FishingSkillRules = {
     -- For ox_lib (returns a list like {'easy','medium'}):
     ox = {
