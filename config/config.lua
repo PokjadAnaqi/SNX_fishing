@@ -21,21 +21,22 @@ Config.SkillSystem = "ox"  -- or "ps"
 -- Tweak these if you want different difficulty curves.
 
 Config.FishingSkillRules = {
-    -- For ox_lib (returns a list like {'easy','medium'}):
     ox = {
         { minChance = 30, difficulties = { 'easy', 'medium' } },
-        { minChance = 15, difficulties = { 'medium', 'medium' } },
-        { minChance = 5,  difficulties = { 'medium', 'hard' } },
-        { minChance = 0,  difficulties = { 'hard', 'hard' } },
+        { minChance = 25, difficulties = { 'medium', 'medium' } },
+        { minChance = 15, difficulties = { 'medium', 'hard' } },
+        { minChance = 5,  difficulties = { 'hard', 'hard' } },
     },
-    -- For ps-ui (returns {circles, ms}):
     ps = {
-        { minChance = 30, circles = 2, ms = 20 },
-        { minChance = 15, circles = 3, ms = 18 },
-        { minChance = 5,  circles = 4, ms = 16 },
-        { minChance = 0,  circles = 5, ms = 14 },
+        { minChance = 30, circles = 2 },
+        { minChance = 25, circles = 3 },
+        { minChance = 15, circles = 4 },
+        { minChance = 5,  circles = 5 },
     }
 }
+
+-- Range untuk random ms (per circle)
+Config.PSUI_msRange = { min = 10, max = 15 }
 
 ---@class Fish
 ---@field price integer | { min: integer, max: integer }
