@@ -199,8 +199,10 @@ lib.callback.register('SNX_fishing:itemUsed', function(bait, fishId)
 
         -- unified skill check
         local success = DoFishingSkillCheckByChance(chance)
-
-        if not success then
+        if success then
+            ShowNotification(locale('catch_success'), 'success')
+            exports.xperience:AddXP(20)
+        else
             ShowNotification(locale('catch_failed'), 'error')
         end
 
