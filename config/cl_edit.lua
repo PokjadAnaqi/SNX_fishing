@@ -119,45 +119,53 @@ function ShowProgressBar(text, duration, canCancel, anim, prop)
     end
 end
 
-function _getOxDifficultiesByChance(chance)
+assert(Config,                "[SNX_fishing] Config is nil. Ensure config.lua is loaded first.")
+assert(Config.SkillSystem,    "[SNX_fishing] Config.SkillSystem is missing in config.lua")
+assert(Config.FishingSkillRules
+    and Config.FishingSkillRules.ox
+    and Config.FishingSkillRules.ps, "[SNX_fishing] Config.FishingSkillRules.* missing in config.lua")
+
+    local function _getOxDifficultiesByChance(chance)
     for _, rule in ipairs(Config.FishingSkillRules.ox) do
         if chance >= rule.minChance then
             return rule.difficulties
         end
     end
-    return { 'medium', 'hard' } -- fallback
+    return { 'medium', 'hard' }
 end
 
-function _getPsParamsByChance(chance)
+local function _getPsParamsByChance(chance)
     for _, rule in ipairs(Config.FishingSkillRules.ps) do
         if chance >= rule.minChance then
-            return rule.circles, rule.ms
+            local minMs = Config.PSUI_msRange.min
+            local maxMs = Config.PSUI_msRange.max
+            local ms = math.random(minMs, maxMs)
+            return rule.circles, ms
         end
     end
-    return 3, 18 -- fallback
+    local ms = math.random(Config.PSUI_msRange.min, Config.PSUI_msRange.max)
+    return 3, ms
 end
 
--- One API to run a skill check; returns boolean
-function DoFishingSkillCheck(fishId)
-    local f = Config.fish[fishId]
-    if not f then return false end
-
-    local chance = tonumber(f.chance) or 15
+function DoFishingSkillCheckByChance(chance)
+    chance = tonumber(chance) or 15
 
     if Config.SkillSystem == 'ox' and lib and lib.skillCheck then
         local diffs = _getOxDifficultiesByChance(chance)
         return lib.skillCheck(diffs, { 'e' }) == true
 
-    elseif Config.SkillSystem == 'ps' and exports['ps-ui'] then
+    elseif Config.SkillSystem == 'ps'
+        and GetResourceState('ps-ui') == 'started'
+        and exports['ps-ui'] ~= nil then
+
         local circles, ms = _getPsParamsByChance(chance)
         local p = promise.new()
         exports['ps-ui']:Circle(function(success)
-            p:resolve(success and true or false)
+            p:resolve(success == true)
         end, circles, ms)
         return Citizen.Await(p) == true
     end
 
-    -- If neither is available, succeed to avoid soft-locks (or change to false if you prefer)
     return true
 end
 
