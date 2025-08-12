@@ -1,7 +1,7 @@
 local pending = {}
 local spawned = {}
 
-lib.callback.register('lunar_fishing:rentVehicle', function(source, index)
+lib.callback.register('SNX_fishing:rentVehicle', function(source, index)
     local player = Framework.getPlayerFromId(source)
 
     if not player then return end
@@ -17,7 +17,7 @@ lib.callback.register('lunar_fishing:rentVehicle', function(source, index)
     return false
 end)
 
-RegisterNetEvent('lunar_fishing:registerBoat', function(netId)
+RegisterNetEvent('SNX_fishing:registerBoat', function(netId)
     local source = source
 
     if pending[source] then
@@ -34,7 +34,7 @@ local function getBoatPrice(vehicle)
     end
 end
 
-lib.callback.register('lunar_fishing:returnVehicle', function(source, netId)
+lib.callback.register('SNX_fishing:returnVehicle', function(source, netId)
     local player = Framework.getPlayerFromId(source)
     local vehicle = NetworkGetEntityFromNetworkId(netId)
     local price = getBoatPrice(vehicle) / Config.renting.returnDivider
