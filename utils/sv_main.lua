@@ -1,5 +1,5 @@
 lib.locale()
-lib.versionCheck('https://github.com/Lunar-Scripts/lunar_fishing')
+lib.versionCheck('https://github.com/PokjadAnaqi/SNX_fishing')
 
 Utils = {}
 local resourceName = GetCurrentResourceName()
@@ -64,7 +64,7 @@ CreateThread(function()
     ready = true
 end)
 
-lib.callback.register('lunar_fishing:getItemLabels', function()
+lib.callback.register('SNX_fishing:getItemLabels', function()
     while not ready do Wait(100) end
 
     return labels
