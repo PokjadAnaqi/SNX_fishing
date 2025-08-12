@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `lunar_fishing` (
+CREATE TABLE IF NOT EXISTS `SNX_fishing` (
   `user_identifier` varchar(50) NOT NULL,
   `xp` float NOT NULL,
   PRIMARY KEY (`user_identifier`)
