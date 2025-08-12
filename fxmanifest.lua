@@ -3,9 +3,9 @@ fx_version 'cerulean'
 game 'gta5'
 lua54 'yes'
 
-author 'Lunar Scripts'
+author 'SNX TEAM'
 description 'Advanced Fishing'
-version '1.0.1'
+version '1.0.2'
 
 files {
     'locales/*.json'
