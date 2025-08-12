@@ -1,7 +1,7 @@
 ---@param source integer
 ---@param fishName string
 ---@param amount integer
-lib.callback.register('lunar_fishing:sellFish', function(source, fishName, amount)
+lib.callback.register('SNX_fishing:sellFish', function(source, fishName, amount)
     local item = Config.fish[fishName]
     local price = type(item.price) == 'number' and item.price or math.random(item.price.min, item.price.max)
 
@@ -29,7 +29,7 @@ end)
 
 ---@param source integer
 ---@param amount integer
-lib.callback.register('lunar_fishing:buy', function(source, data, amount)
+lib.callback.register('SNX_fishing:buy', function(source, data, amount)
     local type, index in data
 
     if type ~= 'fishingRods' and type ~= 'baits' then return end
