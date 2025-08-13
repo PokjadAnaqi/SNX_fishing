@@ -27,4 +27,6 @@ An advanced fishing script that enchances the roleplay on your server!
 ### Preview: https://youtu.be/XUfPRGEm9_I
 ### OWNER Discord: https://discord.gg/zDK4CHQ56N
 
+### MY Discord: https://discord.gg/gCBrnn9bxN
+
 MODIFIED BY POKJADANAQI 
